@@ -12,5 +12,20 @@ periods are used.
 
 from enum import Enum
 
+class MortgageRate(Enum):
+    """Enumeration to represent different mortgage rate options."""
+    FIXED_5 = 0.0519
+    FIXED_3 = 0.0589
+    FIXED_1 = 0.0599
+    VARIABLE_5 = 0.0649
+    VARIABLE_3 = 0.0669
+    VARIABLE_1 = 0.0679
+
+class PaymentFrequency(Enum):
+    """Enumeration to represent different payment frequency options."""
+    MONTHLY = 12
+    BI_WEEKLY = 26
+    WEEKLY = 52
+
 VALID_AMORTIZATION = {5, 10, 15, 20, 25, 30}
 
