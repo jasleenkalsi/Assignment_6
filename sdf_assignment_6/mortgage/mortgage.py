@@ -5,28 +5,28 @@ Date: 03/31/2024
 Usage: Create an instance of the Mortgage class to manage mortgage records and 
 calculate payments.
 """
-from mortgage.pixell_lookup import MortgageRate, PaymentFrequency, VALID_AMORTIZATION 
+from mortgage.pixell_lookup import MortgageRate, PaymentFrequency, VALID_AMORTIZATION
 
-from unittest import TestCase
-from mortgage.mortgage import Mortgage
-from mortgage.pixell_lookup import MortgageRate, PaymentFrequency
+class Mortgage:
+    def __init__(self, loan_amount, string_rate_value, string_frequency_value, amortization):
+        # Validate Loan Amount
+        if loan_amount <= 0:
+            raise ValueError("Loan Amount must be positive.")
+        self.__loan_amount = loan_amount
 
-class MortgageTests(TestCase):
+        # Validate Rate
+        try:
+            self.__rate = MortgageRate[string_rate_value]
+        except KeyError:
+            raise ValueError("Rate provided is invalid.")
 
-    def test_invalid_amount(self):
-        with self.assertRaises(ValueError):
-            Mortgage(-100000, MortgageRate.FIXED_5, PaymentFrequency.MONTHLY, 25)
+        # Validate Frequency
+        try:
+            self.__frequency = PaymentFrequency[string_frequency_value]
+        except KeyError:
+            raise ValueError("Frequency provided is invalid.")
 
-    def test_invalid_rate(self):
-        with self.assertRaises(ValueError):
-            Mortgage(250000, "INVALID_RATE", PaymentFrequency.MONTHLY, 25)
-
-    def test_invalid_frequency(self):
-        with self.assertRaises(ValueError):
-            Mortgage(250000, MortgageRate.FIXED_5, "INVALID_FREQUENCY", 25)
-
-    def test_invalid_amortization(self):
-        with self.assertRaises(ValueError):
-            Mortgage(250000, MortgageRate.FIXED_5, PaymentFrequency.MONTHLY, 100)
-
-    # The fifth test will be added once accessors for the attributes are defined.
+        # Validate Amortization
+        if amortization not in VALID_AMORTIZATION:
+            raise ValueError("Amortization provided is invalid.")
+        self.__amortization = amortization
