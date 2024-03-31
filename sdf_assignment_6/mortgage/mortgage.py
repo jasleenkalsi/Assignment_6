@@ -7,6 +7,7 @@ calculate payments.
 """
 from mortgage.pixell_lookup import MortgageRate, PaymentFrequency, VALID_AMORTIZATION
 
+
 class Mortgage:
     def __init__(self, loan_amount, string_rate_value, string_frequency_value, amortization):
         # Validate Loan Amount
