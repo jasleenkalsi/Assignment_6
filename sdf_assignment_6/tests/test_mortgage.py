@@ -98,4 +98,17 @@ class TestMortgageAmortization(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+    
+class TestMortgageInit(TestCase):
+    def test_init_valid_inputs(self):
+        """Test __init__ method with valid inputs."""
+        mortgage = Mortgage(100000, MortgageRate.FIXED_5, PaymentFrequency.MONTHLY, 25)
+        
+        self.assertEqual(mortgage.loan_amount, 100000)
+        self.assertEqual(mortgage.rate, MortgageRate.FIXED_5)
+        self.assertEqual(mortgage.frequency, PaymentFrequency.MONTHLY)
+        self.assertEqual(mortgage.amortization_period, 25)
+
+if __name__ == '__main__':
+    unittest.main()
 
