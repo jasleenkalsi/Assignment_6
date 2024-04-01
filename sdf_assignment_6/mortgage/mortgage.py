@@ -89,3 +89,27 @@ class Mortgage:
         if value not in VALID_AMORTIZATION:
             raise ValueError("Amortization provided is invalid.")
         self.__amortization_period = value
+
+        from math import pow
+
+class Mortgage:
+    # Existing code...
+
+    def calculate_payment(self) -> float:
+        """Calculate the mortgage payment amount."""
+        if self.frequency == PaymentFrequency.MONTHLY:
+            n = self.amortization_period * 12
+            r = self.rate / 12
+        elif self.frequency == PaymentFrequency.BI_WEEKLY:
+            n = self.amortization_period * 26
+            r = self.rate / 26
+        elif self.frequency == PaymentFrequency.WEEKLY:
+            n = self.amortization_period * 52
+            r = self.rate / 52
+        else:
+            raise ValueError("Invalid payment frequency.")
+
+        # Calculate mortgage payment using the formula
+        mortgage_payment = (self.loan_amount * r) / (1 - pow((1 + r), -n))
+
+        return mortgage_payment

@@ -112,3 +112,28 @@ class TestMortgageInit(TestCase):
 if __name__ == '__main__':
     unittest.main()
 
+
+class TestMortgageCalculatePayment(unittest.TestCase):
+    def test_calculate_payment_monthly(self):
+        """Test calculate_payment method with monthly frequency."""
+        mortgage = Mortgage(682912.43, 0.0599, PaymentFrequency.MONTHLY, 25)
+        expected_payment = 4156.66  # Expected payment amount for the given example
+        calculated_payment = mortgage.calculate_payment()
+        self.assertAlmostEqual(calculated_payment, expected_payment, places=2)
+
+    def test_calculate_payment_biweekly(self):
+        """Test calculate_payment method with bi-weekly frequency."""
+        mortgage = Mortgage(500000, 0.05, PaymentFrequency.BI_WEEKLY, 20)
+        expected_payment = 1239.16  # Example payment amount for bi-weekly frequency
+        calculated_payment = mortgage.calculate_payment()
+        self.assertAlmostEqual(calculated_payment, expected_payment, places=2)
+
+    def test_calculate_payment_weekly(self):
+        """Test calculate_payment method with weekly frequency."""
+        mortgage = Mortgage(300000, 0.045, PaymentFrequency.WEEKLY, 30)
+        expected_payment = 312.11  # Example payment amount for weekly frequency
+        calculated_payment = mortgage.calculate_payment()
+        self.assertAlmostEqual(calculated_payment, expected_payment, places=2)
+
+if __name__ == '__main__':
+    unittest.main()
