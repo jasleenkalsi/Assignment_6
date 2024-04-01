@@ -31,3 +31,37 @@ class Mortgage:
         if amortization not in VALID_AMORTIZATION:
             raise ValueError("Amortization provided is invalid.")
         self.__amortization = amortization
+
+class Mortgage:
+    def __init__(self, loan_amount, mortgage_rate, payment_frequency, amortization_period):
+        self.__loan_amount = None
+        self.loan_amount = loan_amount  # Call the setter to evaluate and set the loan amount
+        self.mortgage_rate = mortgage_rate
+        self.payment_frequency = payment_frequency
+        self.amortization_period = amortization_period
+
+    @property
+    def loan_amount(self):
+        """Accessor for the loan amount."""
+        return self.__loan_amount
+
+    @loan_amount.setter
+    def loan_amount(self, value):
+        """Mutator for the loan amount."""
+        if value > 0:
+            self.__loan_amount = value
+        else:
+            raise ValueError("Loan Amount must be positive.")
+
+    @property
+    def rate(self):
+        """Accessor for the rate."""
+        return self.__rate
+
+    @rate.setter
+    def rate(self, value):
+        """Mutator for the rate."""
+        try:
+            self.__rate = MortgageRate[value]
+        except KeyError:
+            raise ValueError("Rate provided is invalid.")
