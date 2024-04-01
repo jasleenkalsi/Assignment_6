@@ -71,4 +71,31 @@ class TestMortgageRate(TestCase):
 if __name__ == '__main__':
    unittest.main()
 
+class TestMortgageFrequency(TestCase):
+    def test_valid_frequency(self):
+        """Test modifying the Frequency to a valid PaymentFrequency enum value."""
+        mortgage = Mortgage(100000, MortgageRate.FIXED_5, PaymentFrequency.MONTHLY, 25)
+        self.assertEqual(mortgage.frequency, PaymentFrequency.MONTHLY)
+
+    def test_invalid_frequency(self):
+        """Test modifying the Frequency to a value that is not a PaymentFrequency enum type."""
+        with self.assertRaises(ValueError):
+            mortgage = Mortgage(100000, MortgageRate.FIXED_5, 'INVALID_FREQUENCY', 25)
+
+if __name__ == '__main__':
+    unittest.main()
+
+class TestMortgageAmortization(unittest.TestCase):
+    def test_valid_amortization(self):
+        """Test modifying the Amortization to a valid value."""
+        mortgage = Mortgage(100000, 0.05, 'MONTHLY', 25)
+        self.assertEqual(mortgage.amortization_period, 25)
+
+    def test_invalid_amortization(self):
+        """Test modifying the Amortization to an invalid value."""
+        with self.assertRaises(ValueError):
+            mortgage = Mortgage(100000, 0.05, 'MONTHLY', 40)
+
+if __name__ == '__main__':
+    unittest.main()
 

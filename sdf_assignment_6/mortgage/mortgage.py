@@ -7,7 +7,6 @@ calculate payments.
 """
 from mortgage.pixell_lookup import MortgageRate, PaymentFrequency, VALID_AMORTIZATION
 
-
 class Mortgage:
     def __init__(self, loan_amount, string_rate_value, string_frequency_value, amortization):
         # Validate Loan Amount
@@ -65,3 +64,28 @@ class Mortgage:
             self.__rate = MortgageRate[value]
         except KeyError:
             raise ValueError("Rate provided is invalid.")
+        
+    @property
+    def frequency(self):
+        """Accessor for the frequency."""
+        return self.__frequency
+
+    @frequency.setter
+    def frequency(self, value):
+        """Mutator for the frequency."""
+        try:
+            self.__frequency = PaymentFrequency[value]
+        except KeyError:
+            raise ValueError("Frequency provided is invalid.")
+        
+    @property
+    def amortization_period(self):
+        """Accessor for the amortization period."""
+        return self.__amortization_period
+
+    @amortization_period.setter
+    def amortization_period(self, value):
+        """Mutator for the amortization period."""
+        if value not in VALID_AMORTIZATION:
+            raise ValueError("Amortization provided is invalid.")
+        self.__amortization_period = value
