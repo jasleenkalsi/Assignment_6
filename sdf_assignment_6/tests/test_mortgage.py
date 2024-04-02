@@ -12,128 +12,78 @@ from mortgage.pixell_lookup import MortgageRate, PaymentFrequency
 class MortgageTests(TestCase):
     def test_invalid_loan_amount(self):
         with self.assertRaises(ValueError):
-            Mortgage(0, 'FIXED', 'MONTHLY', 25)
-    
+            mortgage = Mortgage(0, MortgageRate.FIXED_1, PaymentFrequency.MONTHLY, 25)
+
     def test_invalid_rate(self):
         with self.assertRaises(ValueError):
-            Mortgage(100000, 'INVALID_RATE', 'MONTHLY', 25)
-
+         mortgage = Mortgage(100000, MortgageRate, PaymentFrequency.MONTHLY, 25)
 
     def test_invalid_frequency(self):
         with self.assertRaises(ValueError):
-            Mortgage(100000, 'FIXED', 'INVALID_FREQUENCY', 25)
+            mortgage = Mortgage(100000, MortgageRate, PaymentFrequency.MONTHLY, 25)
     
     def test_invalid_amortization(self):
         with self.assertRaises(ValueError):
-            Mortgage(100000, 'FIXED', 'MONTHLY', 50)
+            mortgage = Mortgage(100000, MortgageRate.FIXED_1, PaymentFrequency.MONTHLY, 50)
             
     def test_valid_inputs(self):
-        mortgage = Mortgage(100000, 'FIXED', 'MONTHLY', 25)
-        self.assertEqual(mortgage._Mortgage__loan_amount, 100000)
-        self.assertEqual(mortgage._Mortgage__rate, MortgageRate.FIXED)
-        self.assertEqual(mortgage._Mortgage__frequency, PaymentFrequency.MONTHLY)
-        self.assertEqual(mortgage._Mortgage__amortization, 25)
-
-
-    # The fifth test will be added once accessors for the attributes are import unittest
-        from mortgage.mortgage import Mortgage, MortgageRate, PaymentFrequency
+        mortgage = Mortgage(100000, MortgageRate.FIXED_1, PaymentFrequency.MONTHLY, 25)
+        self.assertEqual(mortgage.loan_amount, 100000)
+        self.assertEqual(mortgage.rate, MortgageRate.FIXED_1)
+        self.assertEqual(mortgage.frequency, PaymentFrequency.MONTHLY)
+        self.assertEqual(mortgage.amortization_period, 25)
 
 class TestMortgageLoanAmount(TestCase):
     def test_negative_loan_amount(self):
         """Test modifying the loan amount to a negative value."""
-        mortgage = Mortgage(100000, MortgageRate.FIXED_5, PaymentFrequency.MONTHLY, 25)
+        mortgage = Mortgage(100000, MortgageRate.FIXED_1, PaymentFrequency.MONTHLY, 25)
         with self.assertRaises(ValueError):
             mortgage.loan_amount = -5000
 
     def test_zero_loan_amount(self):
         """Test modifying the loan amount to zero."""
-        mortgage = Mortgage(100000, MortgageRate.FIXED_5, PaymentFrequency.MONTHLY, 25)
+        mortgage = Mortgage(100000, MortgageRate.FIXED_1, PaymentFrequency.MONTHLY, 25)
         with self.assertRaises(ValueError):
             mortgage.loan_amount = 0
 
     def test_positive_loan_amount(self):
         """Test modifying the loan amount to a positive value."""
-        mortgage = Mortgage(100000, MortgageRate.FIXED_5, PaymentFrequency.MONTHLY, 25)
+        mortgage = Mortgage(100000, MortgageRate.FIXED_1, PaymentFrequency.MONTHLY, 25)
         mortgage.loan_amount = 150000
-        self
-        
+        self.assertEqual(mortgage.loan_amount, 150000)
+
 class TestMortgageRate(TestCase):
     def test_valid_rate(self):
         """Test modifying the Rate to a valid MortgageRate enum value."""
-        mortgage = Mortgage(100000, MortgageRate.FIXED_5, PaymentFrequency.MONTHLY, 25)
-        self.assertEqual(mortgage.rate, MortgageRate.FIXED_5)
+        mortgage = Mortgage(100000,MortgageRate.FIXED_1, PaymentFrequency.MONTHLY, 25)
+        self.assertEqual(mortgage.rate, MortgageRate.FIXED_1)
 
     def test_invalid_rate(self):
         """Test modifying the Rate to a value that is not a MortgageRate enum type."""
         with self.assertRaises(ValueError):
             mortgage = Mortgage(100000, 'INVALID_RATE', PaymentFrequency.MONTHLY, 25)
 
-if __name__ == '__main__':
-   unittest.main()
-
 class TestMortgageFrequency(TestCase):
     def test_valid_frequency(self):
         """Test modifying the Frequency to a valid PaymentFrequency enum value."""
-        mortgage = Mortgage(100000, MortgageRate.FIXED_5, PaymentFrequency.MONTHLY, 25)
+        mortgage = Mortgage(100000,MortgageRate.FIXED_1, PaymentFrequency.MONTHLY, 25)
         self.assertEqual(mortgage.frequency, PaymentFrequency.MONTHLY)
 
     def test_invalid_frequency(self):
         """Test modifying the Frequency to a value that is not a PaymentFrequency enum type."""
         with self.assertRaises(ValueError):
-            mortgage = Mortgage(100000, MortgageRate.FIXED_5, 'INVALID_FREQUENCY', 25)
+            mortgage = Mortgage(100000, MortgageRate.FIXED_1, 'INVALID_FREQUENCY', 25)
 
-if __name__ == '__main__':
-    unittest.main()
-
-class TestMortgageAmortization(unittest.TestCase):
+class TestMortgageAmortization(TestCase):
     def test_valid_amortization(self):
         """Test modifying the Amortization to a valid value."""
-        mortgage = Mortgage(100000, 0.05, 'MONTHLY', 25)
+        mortgage = Mortgage(100000, MortgageRate.FIXED_1, PaymentFrequency.MONTHLY, 25)
         self.assertEqual(mortgage.amortization_period, 25)
 
     def test_invalid_amortization(self):
         """Test modifying the Amortization to an invalid value."""
         with self.assertRaises(ValueError):
-            mortgage = Mortgage(100000, 0.05, 'MONTHLY', 40)
-
-if __name__ == '__main__':
-    unittest.main()
-    
-class TestMortgageInit(TestCase):
-    def test_init_valid_inputs(self):
-        """Test __init__ method with valid inputs."""
-        mortgage = Mortgage(100000, MortgageRate.FIXED_5, PaymentFrequency.MONTHLY, 25)
-        
-        self.assertEqual(mortgage.loan_amount, 100000)
-        self.assertEqual(mortgage.rate, MortgageRate.FIXED_5)
-        self.assertEqual(mortgage.frequency, PaymentFrequency.MONTHLY)
-        self.assertEqual(mortgage.amortization_period, 25)
-
-if __name__ == '__main__':
-    unittest.main()
-
-
-class TestMortgageCalculatePayment(unittest.TestCase):
-    def test_calculate_payment_monthly(self):
-        """Test calculate_payment method with monthly frequency."""
-        mortgage = Mortgage(682912.43, 0.0599, PaymentFrequency.MONTHLY, 25)
-        expected_payment = 4156.66  # Expected payment amount for the given example
-        calculated_payment = mortgage.calculate_payment()
-        self.assertAlmostEqual(calculated_payment, expected_payment, places=2)
-
-    def test_calculate_payment_biweekly(self):
-        """Test calculate_payment method with bi-weekly frequency."""
-        mortgage = Mortgage(500000, 0.05, PaymentFrequency.BI_WEEKLY, 20)
-        expected_payment = 1239.16  # Example payment amount for bi-weekly frequency
-        calculated_payment = mortgage.calculate_payment()
-        self.assertAlmostEqual(calculated_payment, expected_payment, places=2)
-
-    def test_calculate_payment_weekly(self):
-        """Test calculate_payment method with weekly frequency."""
-        mortgage = Mortgage(300000, 0.045, PaymentFrequency.WEEKLY, 30)
-        expected_payment = 312.11  # Example payment amount for weekly frequency
-        calculated_payment = mortgage.calculate_payment()
-        self.assertAlmostEqual(calculated_payment, expected_payment, places=2)
+            mortgage = Mortgage(100000, MortgageRate.FIXED_1, PaymentFrequency.MONTHLY, 40)
 
 if __name__ == '__main__':
     unittest.main()

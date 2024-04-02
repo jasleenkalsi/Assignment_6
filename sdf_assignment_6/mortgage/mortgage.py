@@ -8,35 +8,15 @@ calculate payments.
 from mortgage.pixell_lookup import MortgageRate, PaymentFrequency, VALID_AMORTIZATION
 
 class Mortgage:
-    def __init__(self, loan_amount, string_rate_value, string_frequency_value, amortization):
-        # Validate Loan Amount
-        if loan_amount <= 0:
-            raise ValueError("Loan Amount must be positive.")
-        self.__loan_amount = loan_amount
-
-        # Validate Rate
-        try:
-            self.__rate = MortgageRate[string_rate_value]
-        except KeyError:
-            raise ValueError("Rate provided is invalid.")
-
-        # Validate Frequency
-        try:
-            self.__frequency = PaymentFrequency[string_frequency_value]
-        except KeyError:
-            raise ValueError("Frequency provided is invalid.")
-
-        # Validate Amortization
-        if amortization not in VALID_AMORTIZATION:
-            raise ValueError("Amortization provided is invalid.")
-        self.__amortization = amortization
-
-class Mortgage:
     def __init__(self, loan_amount, mortgage_rate, payment_frequency, amortization_period):
         self.__loan_amount = None
-        self.loan_amount = loan_amount  # Call the setter to evaluate and set the loan amount
-        self.mortgage_rate = mortgage_rate
-        self.payment_frequency = payment_frequency
+        self.__rate = None
+        self.__frequency = None
+        self.__amortization_period = None
+        
+        self.loan_amount = loan_amount
+        self.rate = mortgage_rate
+        self.frequency = payment_frequency
         self.amortization_period = amortization_period
 
     @property
@@ -60,11 +40,11 @@ class Mortgage:
     @rate.setter
     def rate(self, value):
         """Mutator for the rate."""
-        try:
-            self.__rate = MortgageRate[value]
-        except KeyError:
+        if value in MortgageRate:
+            self.__rate = value
+        else:
             raise ValueError("Rate provided is invalid.")
-        
+
     @property
     def frequency(self):
         """Accessor for the frequency."""
@@ -73,11 +53,11 @@ class Mortgage:
     @frequency.setter
     def frequency(self, value):
         """Mutator for the frequency."""
-        try:
-            self.__frequency = PaymentFrequency[value]
-        except KeyError:
+        if value in PaymentFrequency:
+            self.__frequency = value
+        else:
             raise ValueError("Frequency provided is invalid.")
-        
+
     @property
     def amortization_period(self):
         """Accessor for the amortization period."""
@@ -86,14 +66,10 @@ class Mortgage:
     @amortization_period.setter
     def amortization_period(self, value):
         """Mutator for the amortization period."""
-        if value not in VALID_AMORTIZATION:
+        if value in VALID_AMORTIZATION:
+            self.__amortization_period = value
+        else:
             raise ValueError("Amortization provided is invalid.")
-        self.__amortization_period = value
-
-        from math import pow
-
-class Mortgage:
-    # Existing code...
 
     def calculate_payment(self) -> float:
         """Calculate the mortgage payment amount."""
@@ -110,6 +86,14 @@ class Mortgage:
             raise ValueError("Invalid payment frequency.")
 
         # Calculate mortgage payment using the formula
-        mortgage_payment = (self.loan_amount * r) / (1 - pow((1 + r), -n))
+        mortgage_payment = (self.loan_amount * r) / (1 - ((1 + r) ** -n))
 
         return mortgage_payment
+
+    def __str__(self) -> str:
+        """Return string representation of Mortgage object."""
+        return f"Mortgage Amount: ${self.loan_amount:.2f} Rate: {self.rate * 100:.2f}% Amortization: {self.amortization_period}"
+
+    def __repr__(self) -> str:
+        """Return raw string representation of Mortgage object."""
+        return f"Mortgage({self.loan_amount}, {self.rate}, {self.frequency}, {self.amortization_period})"

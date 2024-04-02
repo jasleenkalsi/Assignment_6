@@ -2,9 +2,39 @@
 Description: A client program written to verify accuracy of and 
 calculate payments for PiXELL River Mortgages.
 Author: ACE Faculty
-Edited by: {Student Name}
-Date: {Date}
+Edited by: Jasleen Kaur
+Date: 01 April 2024
 """
+import os
+from mortgage.mortgage import Mortgage
+from mortgage.pixell_lookup import MortgageRate, PaymentFrequency
+
+### REQUIREMENT 1: Open and read the pixell_river_mortgages.txt file
+file_path = os.path.join("data", "pixell_river_mortgages.txt")
+with open(file_path, "r") as file:
+    lines = file.readlines()
+
+# Iterate through each line in the file
+for line in lines:
+    # Split the line by commas to get individual values
+    values = line.strip().split(",")
+
+    # Extract values from the list
+    loan_amount = float(values[0])
+    rate_value = values[1]
+    frequency_value = values[2]
+    amortization_period = int(values[3])
+
+    # Create a Mortgage instance with the extracted values
+    try:
+        mortgage = Mortgage(loan_amount, MortgageRate[rate_value], PaymentFrequency[frequency_value], amortization_period)
+        # Print the string representation of the mortgage instance
+        print(str(mortgage))
+        # Calculate and print the mortgage payment
+        print("Calculated Payment: ${:.2f}".format(mortgage.calculate_payment()))
+    except ValueError as e:
+        # If ValueError is raised, print the error message
+        print(e)
 
 ### REQUIREMENT
 ### ADD IMPORT STATEMENT FOR THE MORTGAGE CLASS
