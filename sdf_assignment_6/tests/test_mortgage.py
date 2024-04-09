@@ -10,33 +10,37 @@ from mortgage.mortgage import Mortgage
 from mortgage.pixell_lookup import MortgageRate, PaymentFrequency
 
 class MortgageTests(TestCase):
+    """Test cases for Mortgage class initialization with invalid inputs."""
+    
     def test_invalid_loan_amount(self):
-
-        #Act
-        with self.assertRaises(ValueError):
+         """Test case for invalid loan amount."""
+         #Act
+         with self.assertRaises(ValueError):
             mortgage = Mortgage(0, MortgageRate.FIXED_1, PaymentFrequency.MONTHLY, 25)
 
     def test_invalid_rate(self):
+        """Test case for invalid mortgage rate."""
         #Act
         with self.assertRaises(ValueError):
          mortgage = Mortgage( 100000, MortgageRate, PaymentFrequency.MONTHLY, 25)
 
 
     def test_invalid_frequency(self):
-
+         """Test case for invalid payment frequency."""
         #Act
-        with self.assertRaises(ValueError):
+         with self.assertRaises(ValueError):
             mortgage = Mortgage(100000, MortgageRate, PaymentFrequency.MONTHLY, 25)
 
     
     def test_invalid_amortization(self):
-
+        """Test case for invalid amortization period."""
         #Act
         with self.assertRaises(ValueError):
             mortgage = Mortgage(100000, MortgageRate.FIXED_1, PaymentFrequency.MONTHLY, 50)
            
        #Arrange     
     def test_valid_inputs(self):
+        """Test case for valid input values."""
         mortgage = Mortgage(100000, MortgageRate.FIXED_1, PaymentFrequency.MONTHLY, 25)
         self.assertEqual(mortgage.loan_amount, 100000)
         self.assertEqual(mortgage.rate, MortgageRate.FIXED_1)
